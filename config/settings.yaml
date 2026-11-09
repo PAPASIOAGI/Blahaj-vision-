@@ -1,0 +1,53 @@
+# Konfigurasi Sistem Deteksi Objek Real-Time
+
+# Camera Settings
+camera:
+  device_index: 0           # Indeks kamera (0 = default, 1 = external USB, dll)
+  width: 640                # Resolusi lebar frame
+  height: 480               # Resolusi tinggi frame
+  fps: 30                   # Target FPS kamera
+
+# Model Settings
+model:
+  path: "models/yolov8n.pt"  # Path ke file weights YOLO (auto-download jika tidak ada)
+  # Alternatif: yolov8s.pt, yolov8m.pt, yolov8l.pt, yolov8x.pt
+  task: "detect"             # Task type: detect, segment, classify, pose
+
+# Inference Settings
+inference:
+  conf_threshold: 0.5        # Confidence threshold minimum (0.0 - 1.0)
+  iou_threshold: 0.45        # IoU threshold untuk NMS (0.0 - 1.0)
+  imgsz: 640                 # Input image size untuk model (640 default YOLOv8)
+  max_det: 300               # Maksimum deteksi per frame
+  half_precision: false      # Gunakan FP16 (true = lebih cepat, butuh GPU support)
+  device: "cpu"              # Device: "cpu", "0" (GPU 0), "mps" (Apple Silicon)
+
+# Object Filtering
+filter:
+  enabled: true              # Aktifkan filter kelas
+  target_classes:            # Kosong = deteksi semua 80 kelas COCO
+    - "person"               # Contoh: hanya deteksi orang
+    - "cell phone"           # Contoh: deteksi HP
+    - "bottle"               # Contoh: deteksi botol
+    # Tambahkan kelas lain dari COCO dataset:
+    # - "car", "bus", "truck", "motorcycle", "bicycle"
+    # - "dog", "cat", "chair", "laptop", "book", "cup"
+
+# Display Settings
+display:
+  window_name: "Object Detection - Real-time"
+  show_fps: true             # Tampilkan FPS di frame
+  show_confidence: true      # Tampilkan confidence score di label
+  box_thickness: 2           # Ketebalan bounding box
+  font_scale: 0.6            # Ukuran font label
+  colors:                    # Warna bounding box per kelas (BGR format)
+    person: [0, 255, 0]      # Hijau
+    cell phone: [255, 0, 0]  # Biru
+    bottle: [0, 0, 255]      # Merah
+    default: [255, 255, 0]   # Cyan untuk kelas lain
+
+# Logging
+logging:
+  level: "INFO"              # DEBUG, INFO, WARNING, ERROR
+  save_detections: false     # Simpan log deteksi ke file
+  log_file: "logs/detections.log"

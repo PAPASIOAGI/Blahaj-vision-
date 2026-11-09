@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  object-detection:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: object-detection-app
+    # GPU support (uncomment jika punya NVIDIA GPU & nvidia-container-toolkit)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+    volumes:
+      - ./models:/app/models          # Mount folder model weights
+      - ./config:/app/config          # Mount konfigurasi
+      - ./src:/app/src                # Mount source code (hot reload dev)
+    devices:
+      - /dev/video0:/dev/video0       # Akses kamera (Linux/WSL2)
+    environment:
+      - DISPLAY=${DISPLAY}            # Untuk GUI OpenCV (perlu X11 forwarding)
+      - QT_QPA_PLATFORM=xcb
+    # network_mode: host              # Alternatif untuk akses kamera/network
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+  # Optional: Development service dengan hot reload
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: object-detection-dev
+    volumes:
+      - ./models:/app/models
+      - ./config:/app/config
+      - ./src:/app/src
+    devices:
+      - /dev/video0:/dev/video0
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_QPA_PLATFORM=xcb
+    stdin_open: true
+    tty: true
+    command: ["sleep", "infinity"]  # Keep container running untuk exec

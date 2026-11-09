@@ -1,0 +1,46 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Model weights (large files)
+models/*.pt
+models/*.onnx
+models/*.engine
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Docker
+docker-compose.override.yml
+
+# Environment files
+.env
+.env.local
+
+# Test coverage
+htmlcov/
+.coverage
+.pytest_cache/
+
+# Distribution / Packaging
+dist/
+build/
+*.egg-info/
